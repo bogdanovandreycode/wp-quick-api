@@ -8,35 +8,16 @@
  * Author: Bogdanov Andrey
  * Author URI: mailto://swarzone2100@yandex.ru
  *
- * @package Wp quick Api
+ * @package Wp Quick Api
  * @author Bogdanov Andrey (swarzone2100@yandex.ru)
  */
 
 require_once __DIR__ . '/vendor/autoload.php';
 
+use quickapi\Boot;
 use quickapi\Main;
 
-register_activation_hook(__FILE__, 'quick_api_activation');
-register_deactivation_hook(__FILE__, 'quick_api_deactivation');
-
-function quick_api_activation()
-{
-    $source_file = WP_PLUGIN_DIR . '/wp-quick-api/src/Injection/json_for_api.php';
-    $destination_file = WP_PLUGIN_DIR . '/quickform/site/classes/email/json_for_api.php';
-
-    if (!file_exists($destination_file)) {
-        copy($source_file, $destination_file);
-    }
-}
-
-function quick_api_deactivation()
-{
-    $destination_file = WP_PLUGIN_DIR . '/quickform/site/classes/email/json_for_api.php';
-
-    if (file_exists($destination_file)) {
-        unlink($destination_file);
-    }
-}
+new Boot(__FILE__);
 
 add_action('plugins_loaded', function () {
     if (!is_plugin_active('quickform/quickform.php')) {

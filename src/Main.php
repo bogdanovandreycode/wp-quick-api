@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package Wp quick Api
+ * @package Wp Quick Api
  * @author Bogdanov Andrey (swarzone2100@yandex.ru)
  */
 
@@ -18,44 +18,6 @@ class Main
         DataBase::init();
         new IntegrationsPage;
         $this->apiInit();
-        $this->scriptAdd();
-        $this->Shortcode();
-    }
-
-    private function scriptAdd()
-    {
-        wp_enqueue_style('qapi-front', plugins_url('/' . QAPI_PLUGIN_NAME  . '/Source/Assets/Style/Style.css'));
-
-        add_action('wp_enqueue_scripts', function () {
-            $scripts = [
-                'qapi-main' => 'Main.js',
-            ];
-
-            foreach ($scripts as $label => $path) {
-                wp_enqueue_script(
-                    $label,
-                    plugins_url('/' . QAPI_PLUGIN_NAME  . '/Source/Assets/Js/' . $path),
-                    [],
-                    '1.0.0'
-                );
-            }
-        });
-    }
-
-    private function Shortcode()
-    {
-        add_shortcode('quickapi-shortcode', function ($atts, $content) {
-            $atts = shortcode_atts([
-                'project_id' => '',
-            ], $atts);
-
-            // if( !empty( $atts[ 'url' ] ) )
-            //     return '<script>document.location.href = \'' . $atts[ 'url' ] . '\'</script>';
-            return;
-            // ob_start();
-            // include  __PLUGIN_QUICK_API_DIR__ . '/Source/Template/AuthorMenu.php';
-            // return ob_get_clean();
-        });
     }
 
     private function getApiAnswer($code, $message, $result)
@@ -128,21 +90,23 @@ class Main
                         $secret_key = (string)$request->get_param('quickapi-secret');
                         $project_id = (int)$request->get_param('quickapi-form-id');
                         $integration_id = (int)$request->get_param('quickapi-integration-id');
-                        $cycles_field = (string)$request->get_param('quickapi-field-cycles');
                         $cycles = (string)$request->get_param('quickapi-cycles');
 
-                        if (empty($secret_key) || empty($project_id) || empty($integration_id))
+                        if (empty($secret_key) || empty($project_id) || empty($integration_id)) {
                             return $this->getApiAnswer(-99, 'Too few arguments for this argument.', '');
+                        }
 
                         $project = DataBase::getProject($project_id);
 
-                        if (empty($project))
+                        if (empty($project)) {
                             return $this->getApiAnswer(-98, 'Project is not exist.', '');
+                        }
 
                         $correct_secret_key = get_option('quickapi_secret_key');
 
-                        if ($correct_secret_key !== $secret_key)
+                        if ($correct_secret_key !== $secret_key) {
                             return $this->getApiAnswer(-97, 'Ivalid secret key.', '');
+                        }
 
                         $cycles_arrow = json_decode($cycles);
 
@@ -157,8 +121,9 @@ class Main
 
                                     array_push($field->options, ['label' => 'Выберите']);
 
-                                    foreach ($cycles_arrow as $cycle)
+                                    foreach ($cycles_arrow as $cycle) {
                                         array_push($field->options, ['label' => $cycle]);
+                                    }
 
                                     break;
                                 }
