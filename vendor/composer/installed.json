@@ -1,5 +1,50 @@
 {
-    "packages": [],
+    "packages": [
+        {
+            "name": "dadadam/wptoolkit",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Dadadam999/WPToolkit.git",
+                "reference": "5fa9ccea4ea46c6944db001c057adc58db7ddd71"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Dadadam999/WPToolkit/zipball/5fa9ccea4ea46c6944db001c057adc58db7ddd71",
+                "reference": "5fa9ccea4ea46c6944db001c057adc58db7ddd71",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2||^8.3"
+            },
+            "time": "2024-01-12T13:43:42+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "WpToolKit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andrey Bogdanov",
+                    "email": "bogdanov.andrey.code@gmail.com"
+                }
+            ],
+            "description": "WP Tool Kit is library for create wordpress plugin.",
+            "support": {
+                "issues": "https://github.com/Dadadam999/WPToolkit/issues",
+                "source": "https://github.com/Dadadam999/WPToolkit/tree/main"
+            },
+            "install-path": "../dadadam/wptoolkit"
+        }
+    ],
     "dev": true,
     "dev-package-names": []
 }

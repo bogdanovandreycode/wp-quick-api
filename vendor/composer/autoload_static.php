@@ -7,16 +7,24 @@ namespace Composer\Autoload;
 class ComposerStaticInit5e29ecd56040aec568976fbb7078a959
 {
     public static $prefixLengthsPsr4 = array (
-        'D' => 
+        'q' => 
         array (
-            'Dadadam\\WpQuickApi\\' => 19,
+            'quickapi\\' => 9,
+        ),
+        'W' => 
+        array (
+            'WpToolKit\\' => 10,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'Dadadam\\WpQuickApi\\' => 
+        'quickapi\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'WpToolKit\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/dadadam/wptoolkit/src',
         ),
     );
 

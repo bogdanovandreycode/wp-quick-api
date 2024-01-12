@@ -6,5 +6,6 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Dadadam\\WpQuickApi\\' => array($baseDir . '/src'),
+    'quickapi\\' => array($baseDir . '/src'),
+    'WpToolKit\\' => array($vendorDir . '/dadadam/wptoolkit/src'),
 );

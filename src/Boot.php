@@ -10,8 +10,8 @@ final class Boot
     public function __construct(
         private string $mainFilePath,
     ) {
-        register_activation_hook($mainFilePath, 'quickApiActivation');
-        register_deactivation_hook($mainFilePath, 'quickApiDeactivation');
+        register_activation_hook($mainFilePath, [$this, 'quickApiActivation']);
+        register_deactivation_hook($mainFilePath, [$this, 'quickApiDeactivation']);
     }
 
     public function quickApiActivation()
