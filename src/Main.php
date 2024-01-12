@@ -7,17 +7,29 @@
 
 namespace quickapi;
 
-use quickapi\Admin\IntegrationsPage;
-use quickapi\DataBase;
 use WP_REST_Request;
+use quickapi\DataBase;
+use WpToolKit\Entity\ScriptType;
+use quickapi\Admin\IntegrationsPage;
+use WpToolKit\Controller\ScriptController;
 
 class Main
 {
+    private ScriptController $scripts;
+
     public function __construct()
     {
         DataBase::init();
         new IntegrationsPage;
         $this->apiInit();
+
+        $this->scripts = new ScriptController();
+
+        $this->scripts->addStyle(
+            'wp-quick-api-style',
+            '/wp-quick-api/assets/style/Style.css',
+            ScriptType::ADMIN
+        );
     }
 
     private function getApiAnswer($code, $message, $result)
