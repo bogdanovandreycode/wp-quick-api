@@ -1,0 +1,15 @@
+{
+    "name": "dadadam/wp-quick-api",
+    "autoload": {
+        "psr-4": {
+            "Dadadam\\WpQuickApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dadadam",
+            "email": "bogdanov.andrey.code@gmail.com"
+        }
+    ],
+    "require": {}
+}
