@@ -11,21 +11,18 @@ use WP_REST_Request;
 use quickapi\DataBase;
 use WpToolKit\Entity\ScriptType;
 use quickapi\Admin\IntegrationsPage;
-use WpToolKit\Controller\ScriptController;
+use WpToolKit\Factory\ServiceFactory;
 
 class Main
 {
-    private ScriptController $scripts;
-
     public function __construct()
     {
         DataBase::init();
         new IntegrationsPage;
         $this->apiInit();
+        $scripts = ServiceFactory::getService('ScriptController');
 
-        $this->scripts = new ScriptController();
-
-        $this->scripts->addStyle(
+        $scripts->addStyle(
             'wp-quick-api-style',
             '/wp-quick-api/assets/style/Style.css',
             ScriptType::ADMIN
