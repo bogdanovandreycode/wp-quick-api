@@ -2,16 +2,15 @@
 
 namespace quickapi\Controller\MetaBox\Integration;
 
-use quickapi\DataBase;
 use WpToolKit\Entity\Post;
 use WpToolKit\Entity\MetaPoly;
 use WpToolKit\Controller\ViewLoader;
 use WpToolKit\Interface\MetaBoxInterface;
 use WpToolKit\Controller\MetaBoxController;
 
-class SettingsQuickForm extends MetaBoxController implements MetaBoxInterface
+class SettingsYandex extends MetaBoxController implements MetaBoxInterface
 {
-    private string $nonce = 'qapi_integration_meta_nonce';
+    private string $nonce = 'yandex_integration_meta_nonce';
 
     public function __construct(
         public ViewLoader $views,
@@ -20,8 +19,8 @@ class SettingsQuickForm extends MetaBoxController implements MetaBoxInterface
         private MetaPoly $projectId
     ) {
         parent::__construct(
-            'settings_quick_form',
-            'Quick Form интеграции',
+            'settings_yandex',
+            'Yandex интеграции',
             $parentPost->name
         );
     }
@@ -29,16 +28,16 @@ class SettingsQuickForm extends MetaBoxController implements MetaBoxInterface
     public function render($post): void
     {
         $this->projectId->value = get_post_meta($post->ID, $this->projectId->name, true);
-        $projects = DataBase::getProjects();
         $this->secret->value = get_option($this->secret->name);
 
-        $view = $this->views->getView('settings_quick_form');
-        $view->addVariable('currentProjectId', $this->projectId->value);
-        $view->addVariable('secret', $this->secret->value);
-        $view->addVariable('projects', $projects);
-        $view->addVariable('nonce', $this->nonce);
-        $view->addVariable('post', $post);
-        $this->views->load($view->name);
+        // $view = $this->views->getView('settings_quick_form');
+        // $view->addVariable('currentProjectId', $this->projectId->value);
+        // $view->addVariable('secret', $this->secret->value);
+        // $view->addVariable('nonce', $this->nonce);
+        // $view->addVariable('post', $post);
+        //$this->views->load($view->name);
+
+        echo 'It works';
     }
 
     public function callback($postId): void

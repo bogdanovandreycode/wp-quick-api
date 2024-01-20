@@ -7,9 +7,9 @@
 
 namespace quickapi;
 
+use quickapi\Controller\MetaBox\Integration\SettingsYandex;
 use quickapi\Controller\Route\GetAnswers;
 use quickapi\Controller\Route\SyncCyclesQuickForm;
-use WP_REST_Request;
 use quickapi\DataBase;
 use WpToolKit\Entity\View;
 use WpToolKit\Entity\MetaPoly;
@@ -21,6 +21,7 @@ use quickapi\Controller\Page\Settings;
 use WpToolKit\Controller\ScriptController;
 use quickapi\Controller\Post\Integration\PostQuickForm;
 use quickapi\Controller\MetaBox\Integration\SettingsQuickForm;
+use quickapi\Controller\Post\Integration\PostYandex;
 
 class Main
 {
@@ -42,8 +43,11 @@ class Main
     private function createStructure(): void
     {
         $integrationQf = new PostQuickForm();
+        $integrationYandex = new PostYandex($integrationQf->post);
         $secret = new MetaPoly('quickapi_secret_key', MetaPolyType::STRING);
-        new SettingsQuickForm($this->views, $integrationQf->post, $secret);
+        $projectId = new MetaPoly('project-integration-id', MetaPolyType::STRING);
+        new SettingsQuickForm($this->views, $integrationQf->post, $secret, $projectId);
+        new SettingsYandex($this->views, $integrationYandex->post, $secret, $projectId);
         new Settings($this->views, $integrationQf->post, $secret);
     }
 
