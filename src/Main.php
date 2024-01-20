@@ -9,20 +9,66 @@ namespace quickapi;
 
 use WP_REST_Request;
 use quickapi\DataBase;
+use WpToolKit\Entity\View;
+use WpToolKit\Entity\MetaPoly;
 use WpToolKit\Entity\ScriptType;
-use quickapi\Admin\IntegrationsPage;
+use WpToolKit\Entity\MetaPolyType;
+use WpToolKit\Controller\ViewLoader;
 use WpToolKit\Factory\ServiceFactory;
+use quickapi\Controller\Page\Settings;
+use WpToolKit\Controller\ScriptController;
+use quickapi\Controller\Post\Integration\PostQuickForm;
+use quickapi\Controller\MetaBox\Integration\SettingsQuickForm;
 
 class Main
 {
+    private ViewLoader $views;
+    private ScriptController $scripts;
+
     public function __construct()
     {
         DataBase::init();
-        new IntegrationsPage;
-        $this->apiInit();
-        $scripts = ServiceFactory::getService('ScriptController');
+        $this->views = new ViewLoader();
+        $this->scripts = ServiceFactory::getService('ScriptController');
 
-        $scripts->addStyle(
+        $this->addScript();
+        $this->apiInit();
+        $this->createView();
+        $this->createStructure();
+    }
+
+    private function createStructure(): void
+    {
+        $integrationQf = new PostQuickForm();
+        $secret = new MetaPoly('quickapi_secret_key', MetaPolyType::STRING);
+        $integrationQfSettings = new SettingsQuickForm($this->views, $integrationQf->post, $secret);
+        $settings = new Settings($this->views, $integrationQf->post, $secret);
+    }
+
+    private function createView()
+    {
+        $basePathTemplate = WP_PLUGIN_DIR . '/wp-quick-api/src/Template';
+
+        $this->views->add(
+            new View(
+                'settings_quick_form',
+                $basePathTemplate . '/Integration/SettingsQuickFormView.php',
+                []
+            )
+        );
+
+        $this->views->add(
+            new View(
+                'settings',
+                $basePathTemplate . '/SettingsView.php',
+                []
+            )
+        );
+    }
+
+    private function addScript()
+    {
+        $this->scripts->addStyle(
             'wp-quick-api-style',
             '/wp-quick-api/assets/style/Style.css',
             ScriptType::ADMIN
