@@ -4,52 +4,42 @@ namespace quickapi\Controller\Route;
 
 use WP_REST_Request;
 use quickapi\DataBase;
+use WpToolKit\Entity\MetaPoly;
 use WpToolKit\Controller\RouteController;
 use WpToolKit\Interface\RestRouteInterface;
+use quickapi\Controller\RouteParam\SecretKey;
+use quickapi\Controller\RouteParam\IntegrationId;
+use quickapi\Controller\RouteParam\ProjectIdQuickForm;
 
-class GetAnswers extends RouteController implements RestRouteInterface
+class GetAnswersQuickForm extends RouteController implements RestRouteInterface
 {
-    public function __construct()
-    {
+    public function __construct(
+        private MetaPoly $secret
+    ) {
+        $projectId = new ProjectIdQuickForm();
+        $integrationId = new IntegrationId();
+        $secretKey = new SecretKey($this->secret);
+
         parent::__construct(
             'quickapi/v1',
-            '/get-answers',
-            []
+            '/get-answers-quickform',
+            [
+                array_merge(
+                    $projectId->getArray(),
+                    $integrationId->getArray(),
+                    $secretKey->getArray()
+                )
+            ]
         );
     }
 
     public function callback(WP_REST_Request $request): mixed
     {
-        $secretKey = (string)$request->get_param('quickapi-secret');
         $projectId = (int)$request->get_param('quickapi-form-id');
-        $integrationId = (int)$request->get_param('quickapi-integration-id');
         $datePoint = (string)$request->get_param('quickapi-date-point');
         $lastId = (int)$request->get_param('quickapi-last-answer');
-
-        if (empty($secretKey) || empty($projectId) || empty($integrationId)) {
-            return $this->getResponce('Too few arguments for this argument.');
-        }
-
-        if (empty($datePoint)) {
-            $datePoint = date('yyyy-MM-dd HH:mm:ss');
-        }
-
-        if (empty($lastId)) {
-            $lastId = '0';
-        }
-
-        $project = DataBase::getProject($projectId);
-
-        if (empty($project)) {
-            return $this->getResponce('Project is not exist.');
-        }
-
-        $correct_secret_key = get_option('quickapi_secret_key');
-
-        if ($correct_secret_key !== $secretKey) {
-            return $this->getResponce('Ivalid secret key.');
-        }
-
+        $datePoint = empty($datePoint) ? date('yyyy-MM-dd HH:mm:ss') : $datePoint;
+        $lastId = empty($lastId) ? '0' : $lastId;
         $history = DataBase::getHistoryByDateAndLast($projectId, $datePoint, $lastId);
         $result  = [];
 

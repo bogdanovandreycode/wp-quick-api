@@ -4,46 +4,41 @@ namespace quickapi\Controller\Route;
 
 use WP_REST_Request;
 use quickapi\DataBase;
+use WpToolKit\Entity\MetaPoly;
 use WpToolKit\Controller\RouteController;
 use WpToolKit\Interface\RestRouteInterface;
+use quickapi\Controller\RouteParam\SecretKey;
+use quickapi\Controller\RouteParam\IntegrationId;
+use quickapi\Controller\RouteParam\ProjectIdQuickForm;
 
 class SyncCyclesQuickForm extends RouteController implements RestRouteInterface
 {
-    public function __construct()
-    {
+    public function __construct(
+        private MetaPoly $secret
+    ) {
+        $projectId = new ProjectIdQuickForm();
+        $integrationId = new IntegrationId();
+        $secretKey = new SecretKey($this->secret);
+
         parent::__construct(
             'quickapi/v1',
-            '/sync-cycles',
-            []
+            '/sync-cycles-quickform',
+            [
+                array_merge(
+                    $projectId->getArray(),
+                    $integrationId->getArray(),
+                    $secretKey->getArray()
+                )
+            ]
         );
     }
 
     public function callback(WP_REST_Request $request): mixed
     {
-        $secret_key = (string)$request->get_param('quickapi-secret');
-        $project_id = (int)$request->get_param('quickapi-form-id');
-        $integration_id = (int)$request->get_param('quickapi-integration-id');
+        $projectId = (int)$request->get_param('quickapi-form-id');
         $cycles = (string)$request->get_param('quickapi-cycles');
-
-        if (empty($secret_key) || empty($project_id) || empty($integration_id)) {
-            return $this->getResponce('Too few arguments for this argument.');
-        }
-
-        $project = DataBase::getProject($project_id);
-
-        if (empty($project)) {
-            return $this->getResponce('Project is not exist.');
-        }
-
-        $correct_secret_key = get_option('quickapi_secret_key');
-
-        if ($correct_secret_key !== $secret_key) {
-            return $this->getResponce('Ivalid secret key.');
-        }
-
-        $cycles_arrow = json_decode($cycles);
-
-        $forms = DataBase::getForms($project_id);
+        $cycles = json_decode($cycles);
+        $forms = DataBase::getForms($projectId);
 
         foreach ($forms as $form) {
             $fields = json_decode($form['fields']);
@@ -53,10 +48,9 @@ class SyncCyclesQuickForm extends RouteController implements RestRouteInterface
                     continue;
                 }
 
-                $field->options = [];
-                $field->options[] = ['label' => 'Выберите'];
+                $field->options = ['label' => 'Выберите'];
 
-                foreach ($cycles_arrow as $cycle) {
+                foreach ($cycles as $cycle) {
                     $field->options[] = ['label' => $cycle];
                 }
 

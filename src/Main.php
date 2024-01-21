@@ -7,10 +7,8 @@
 
 namespace quickapi;
 
-use quickapi\Controller\MetaBox\Integration\SettingsYandex;
-use quickapi\Controller\Route\GetAnswers;
-use quickapi\Controller\Route\SyncCyclesQuickForm;
 use quickapi\DataBase;
+
 use WpToolKit\Entity\View;
 use WpToolKit\Entity\MetaPoly;
 use WpToolKit\Entity\ScriptType;
@@ -19,9 +17,12 @@ use WpToolKit\Controller\ViewLoader;
 use WpToolKit\Factory\ServiceFactory;
 use quickapi\Controller\Page\Settings;
 use WpToolKit\Controller\ScriptController;
-use quickapi\Controller\Post\Integration\PostQuickForm;
-use quickapi\Controller\MetaBox\Integration\SettingsQuickForm;
+use quickapi\Controller\Route\GetAnswersQuickForm;
+use quickapi\Controller\Route\SyncCyclesQuickForm;
 use quickapi\Controller\Post\Integration\PostYandex;
+use quickapi\Controller\Post\Integration\PostQuickForm;
+use quickapi\Controller\MetaBox\Integration\SettingsYandex;
+use quickapi\Controller\MetaBox\Integration\SettingsQuickForm;
 
 class Main
 {
@@ -33,9 +34,7 @@ class Main
         DataBase::init();
         $this->views = new ViewLoader();
         $this->scripts = ServiceFactory::getService('ScriptController');
-
         $this->addScript();
-        $this->createRestRoute();
         $this->createView();
         $this->createStructure();
     }
@@ -49,6 +48,8 @@ class Main
         new SettingsQuickForm($this->views, $integrationQf->post, $secret, $projectId);
         new SettingsYandex($this->views, $integrationYandex->post, $secret, $projectId);
         new Settings($this->views, $integrationQf->post, $secret);
+        new GetAnswersQuickForm($secret);
+        new SyncCyclesQuickForm($secret);
     }
 
     private function createView()
@@ -59,6 +60,14 @@ class Main
             new View(
                 'settings_quick_form',
                 $basePathTemplate . '/Integration/SettingsQuickFormView.php',
+                []
+            )
+        );
+
+        $this->views->add(
+            new View(
+                'settings_yandex',
+                $basePathTemplate . '/Integration/SettingsYandexView.php',
                 []
             )
         );
@@ -79,11 +88,5 @@ class Main
             '/wp-quick-api/assets/style/Style.css',
             ScriptType::ADMIN
         );
-    }
-
-    private function createRestRoute()
-    {
-        new GetAnswers();
-        new SyncCyclesQuickForm();
     }
 }

@@ -33,7 +33,7 @@ class SettingsQuickForm extends MetaBoxController implements MetaBoxInterface
         $this->secret->value = get_option($this->secret->name);
 
         $view = $this->views->getView('settings_quick_form');
-        $view->addVariable('currentProjectId', $this->projectId->value);
+        $view->addVariable('currentProjectId', $this->projectId);
         $view->addVariable('secret', $this->secret->value);
         $view->addVariable('projects', $projects);
         $view->addVariable('nonce', $this->nonce);

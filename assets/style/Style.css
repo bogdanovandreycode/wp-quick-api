@@ -1,4 +1,4 @@
-.quickapi-wrapper-admin{
+.quickapi-wrapper-admin {
     width: 100%;
     height: 100%;
     display: flex;
@@ -6,6 +6,7 @@
     flex-wrap: nowrap;
     margin: 24px;
 }
+
 .quickapi-form {
     display: flex;
     gap: 20px;
@@ -13,6 +14,7 @@
     flex-wrap: nowrap;
     align-items: flex-start;
 }
+
 .quickapi-field {
     display: flex;
     gap: 10px;
@@ -45,7 +47,19 @@
     align-items: flex-start;
 }
 
-.quickapi-text--label, .quickapi-label {
+.quickapi-text--label,
+.quickapi-label {
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.quickapi-text {
+    padding: 5px 5px !important;
+    border-radius: 8px !important;
+    min-width: 215px !important;
+}
+
+.quickapi-field>label {
     font-size: 16px;
     line-height: 24px;
 }
@@ -57,22 +71,12 @@
     min-width: 150px;
 }
 
-@media(max-width:1440px) {
+@media(max-width:1440px) {}
 
-}
+@media(max-width:1280px) {}
 
-@media(max-width:1280px) {
+@media(max-width:1024px) {}
 
-}
+@media(max-width:768px) {}
 
-@media(max-width:1024px) {
-
-}
-
-@media(max-width:768px) {
-
-}
-
-@media(max-width:640px) {
-
-}
+@media(max-width:640px) {}

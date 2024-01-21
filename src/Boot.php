@@ -2,6 +2,8 @@
 
 namespace quickapi;
 
+use quickapi\Table\YandexAnswer;
+
 final class Boot
 {
     private string $sourceFilePath = WP_PLUGIN_DIR . '/wp-quick-api/src/Injection/json_for_api.php';
@@ -16,6 +18,8 @@ final class Boot
 
     public function quickApiActivation()
     {
+        YandexAnswer::createTable();
+
         if (!file_exists($this->destinationFilePath)) {
             copy($this->sourceFilePath, $this->destinationFilePath);
         }
@@ -23,6 +27,8 @@ final class Boot
 
     public function quickApiDeactivation()
     {
+        YandexAnswer::deleteTable();
+
         if (file_exists($this->destinationFilePath)) {
             unlink($this->destinationFilePath);
         }
