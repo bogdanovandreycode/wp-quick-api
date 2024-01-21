@@ -69,7 +69,7 @@ class YandexAnswer
         return $wpdb->get_results($sql);
     }
 
-    public static function addIntegration($formId, $integrationId, $jsonFields)
+    public static function add($formId, $integrationId, $jsonFields)
     {
         global $wpdb;
         $tableName = self::getTableName();
@@ -93,5 +93,21 @@ class YandexAnswer
         global $wpdb;
         $tableName = self::getTableName();
         $wpdb->delete($tableName, ['form_id' => $formId]);
+    }
+
+    public static function getHistoryByDateAndLast($integrationId, $formId, $date, $lastId)
+    {
+        global $wpdb;
+        $tableName = self::getTableName();
+
+        $sql = $wpdb->prepare(
+            "SELECT `id`, `json_fields`, `create_date` FROM `$tableName` WHERE `integration_id` = %d AND `form_id` = %d AND `create_date` > %s AND `id` > %d",
+            $integrationId,
+            $formId,
+            $date,
+            $lastId
+        );
+
+        return $wpdb->get_results($sql, ARRAY_A);
     }
 }

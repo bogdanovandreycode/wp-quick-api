@@ -15,7 +15,17 @@ class IntegrationId extends ParamRoute implements ParamRoureInterface
 
     public function validate($param, $request, $key): bool|WP_Error
     {
-        return empty($param) ? new WP_Error('err', 'Integration id is empty.') : true;
+        $integration = get_post((int)$param);
+
+        if (empty($integration)) {
+            return new WP_Error('err', 'Integration does not exists.');
+        }
+
+        if (empty($param)) {
+            return new WP_Error('err', 'Integration id is empty.');
+        }
+
+        return true;
     }
 
     public function sanitize($param, $request, $key): mixed

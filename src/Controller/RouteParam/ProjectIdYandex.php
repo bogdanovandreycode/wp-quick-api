@@ -16,14 +16,8 @@ class ProjectIdYandex extends ParamRoute implements ParamRoureInterface
 
     public function validate($param, $request, $key): bool|WP_Error
     {
-        $project = YandexAnswer::getByIntegrationId($param);
-
         if (empty($param)) {
             return new WP_Error('err', 'Project id is empty.');
-        }
-
-        if (empty($project)) {
-            return new WP_Error('err', 'Project does not exists.');
         }
 
         return true;
