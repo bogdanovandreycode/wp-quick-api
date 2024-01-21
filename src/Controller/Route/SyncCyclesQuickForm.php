@@ -16,19 +16,13 @@ class SyncCyclesQuickForm extends RouteController implements RestRouteInterface
     public function __construct(
         private MetaPoly $secret
     ) {
-        $projectId = new ProjectIdQuickForm();
-        $integrationId = new IntegrationId();
-        $secretKey = new SecretKey($this->secret);
-
         parent::__construct(
             'quickapi/v1',
             '/sync-cycles-quickform',
             [
-                array_merge(
-                    $projectId->getArray(),
-                    $integrationId->getArray(),
-                    $secretKey->getArray()
-                )
+                new ProjectIdQuickForm(),
+                new IntegrationId(),
+                new SecretKey($this->secret)
             ]
         );
     }

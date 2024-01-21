@@ -4,7 +4,7 @@
  * Plugin Name: Wp Quick Api
  * Plugin URI: /wp-admin/admin.php?page=settings_quickapi
  * Description: Плагин добавляет возможность интеграции по эндпоинтам api ответов плагина Quick Form.
- * Version: 1.0.0
+ * Version: 2.0.0
  * Author: Bogdanov Andrey
  * Author URI: mailto://swarzone2100@yandex.ru
  *

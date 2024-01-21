@@ -7,6 +7,7 @@
 
 namespace quickapi;
 
+use quickapi\Controller\Route\GetAnswersYandex;
 use quickapi\DataBase;
 
 use WpToolKit\Entity\View;
@@ -23,6 +24,7 @@ use quickapi\Controller\Post\Integration\PostYandex;
 use quickapi\Controller\Post\Integration\PostQuickForm;
 use quickapi\Controller\MetaBox\Integration\SettingsYandex;
 use quickapi\Controller\MetaBox\Integration\SettingsQuickForm;
+use quickapi\Controller\Route\SendAnswersYandex;
 
 class Main
 {
@@ -50,6 +52,8 @@ class Main
         new Settings($this->views, $integrationQf->post, $secret);
         new GetAnswersQuickForm($secret);
         new SyncCyclesQuickForm($secret);
+        new GetAnswersYandex($secret);
+        new SendAnswersYandex($secret);
     }
 
     private function createView()

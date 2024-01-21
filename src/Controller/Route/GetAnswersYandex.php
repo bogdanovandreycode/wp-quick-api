@@ -15,19 +15,13 @@ class GetAnswersYandex extends RouteController implements RestRouteInterface
     public function __construct(
         private MetaPoly $secret
     ) {
-        $integrationId = new IntegrationId();
-        $secretKey = new SecretKey($this->secret);
-        $projectId = new ProjectIdYandex();
-
         parent::__construct(
             'quickapi/v1',
             '/get-answers-yandex',
             [
-                array_merge(
-                    $integrationId->getArray(),
-                    $secretKey->getArray(),
-                    $projectId->getArray()
-                )
+                new ProjectIdYandex(),
+                new IntegrationId(),
+                new SecretKey($this->secret)
             ]
         );
     }

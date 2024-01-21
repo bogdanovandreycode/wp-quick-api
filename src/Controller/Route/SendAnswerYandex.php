@@ -15,26 +15,20 @@ class SendAnswersYandex extends RouteController implements RestRouteInterface
     public function __construct(
         private MetaPoly $secret
     ) {
-        $integrationId = new IntegrationId();
-        $secretKey = new SecretKey($this->secret);
-        $projectId = new ProjectIdYandex();
-
         parent::__construct(
             'quickapi/v1',
-            '/get-answers-yandex',
+            '/send-answers-yandex',
             [
-                array_merge(
-                    $integrationId->getArray(),
-                    $secretKey->getArray(),
-                    $projectId->getArray()
-                )
+                new ProjectIdYandex(),
+                new IntegrationId(),
+                new SecretKey($this->secret)
             ]
         );
     }
 
     public function callback(WP_REST_Request $request): mixed
     {
-
+        file_put_contents('test.json', json_encode($request));
         return $this->getResponce('Success.');
     }
 
