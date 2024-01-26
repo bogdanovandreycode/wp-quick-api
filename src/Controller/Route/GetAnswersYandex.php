@@ -44,7 +44,8 @@ class GetAnswersYandex extends RouteController implements RestRouteInterface
         $datePoint = empty($datePoint) ? date('yyyy-MM-dd HH:mm:ss') : $datePoint;
         $lastId = empty($lastId) ? '0' : $lastId;
         $history = YandexAnswer::getHistoryByDateAndLast($integrationId, $formId, $datePoint, $lastId);
-
+        $result = [];
+        
         foreach ($history as $answer) {
             $fields = json_decode($answer['json_fields'], true);
             $row = [];
