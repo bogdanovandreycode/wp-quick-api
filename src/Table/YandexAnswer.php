@@ -4,7 +4,7 @@ namespace quickapi\Table;
 
 class YandexAnswer
 {
-    public static function createTable()
+    public static function createTable(): array
     {
         global $wpdb;
         $tableName = self::getTableName();
@@ -20,24 +20,24 @@ class YandexAnswer
         ) $charsetCollate;";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        dbDelta($sql);
+        return dbDelta($sql);
     }
 
-    public static function deleteTable()
+    public static function deleteTable(): bool|int
     {
         global $wpdb;
         $tableName = self::getTableName();
         $sql = "DROP TABLE IF EXISTS $tableName;";
-        $wpdb->query($sql);
+        return $wpdb->query($sql);
     }
 
-    public static function getTableName()
+    public static function getTableName(): string
     {
         global $wpdb;
         return $wpdb->prefix . 'yandex_integrations';
     }
 
-    public static function get(int $id)
+    public static function get(int $id): array|object|null
     {
         global $wpdb;
         $tableName = self::getTableName();
@@ -45,7 +45,7 @@ class YandexAnswer
         return $wpdb->get_row($sql);
     }
 
-    public static function getAll()
+    public static function getAll(): array|object|null
     {
         global $wpdb;
         $tableName = self::getTableName();
@@ -53,7 +53,7 @@ class YandexAnswer
         return $wpdb->get_results($sql);
     }
 
-    public static function getByFormId(int $formId)
+    public static function getByFormId(string $formId): array|object|null
     {
         global $wpdb;
         $tableName = self::getTableName();
@@ -61,7 +61,7 @@ class YandexAnswer
         return $wpdb->get_results($sql);
     }
 
-    public static function getByIntegrationId(int $integrationId)
+    public static function getByIntegrationId(int $integrationId): array|object|null
     {
         global $wpdb;
         $tableName = self::getTableName();
@@ -69,7 +69,7 @@ class YandexAnswer
         return $wpdb->get_results($sql);
     }
 
-    public static function add($formId, $integrationId, $jsonFields)
+    public static function add(string $formId, int $integrationId, string $jsonFields): int
     {
         global $wpdb;
         $tableName = self::getTableName();
@@ -81,27 +81,27 @@ class YandexAnswer
         return $wpdb->insert_id;
     }
 
-    public static function deleteIntegration($id)
+    public static function deleteIntegration(int $id): bool|int
     {
         global $wpdb;
         $tableName = self::getTableName();
-        $wpdb->delete($tableName, ['id' => $id]);
+        return $wpdb->delete($tableName, ['id' => $id]);
     }
 
-    public static function deleteIntegrationByFormId($formId)
+    public static function deleteIntegrationByFormId(string $formId): bool|int
     {
         global $wpdb;
         $tableName = self::getTableName();
-        $wpdb->delete($tableName, ['form_id' => $formId]);
+        return $wpdb->delete($tableName, ['form_id' => $formId]);
     }
 
-    public static function getHistoryByDateAndLast($integrationId, $formId, $date, $lastId)
+    public static function getHistoryByDateAndLast(int $integrationId, string $formId, string $date, int $lastId): array|object|null
     {
         global $wpdb;
         $tableName = self::getTableName();
 
         $sql = $wpdb->prepare(
-            "SELECT `id`, `json_fields`, `create_date` FROM `$tableName` WHERE `integration_id` = %d AND `form_id` = %d AND `create_date` > %s AND `id` > %d",
+            "SELECT `id`, `json_fields`, `create_date` FROM `$tableName` WHERE `integration_id` = %d AND `form_id` = %s AND `create_date` > %s AND `id` > %d",
             $integrationId,
             $formId,
             $date,

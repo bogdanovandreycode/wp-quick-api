@@ -41,11 +41,11 @@ class GetAnswersYandex extends RouteController implements RestRouteInterface
         $integrationId = $request->get_param($this->integrationId->name);
         $datePoint = (string)$request->get_param('quickapi-date-point');
         $lastId = (int)$request->get_param('quickapi-last-answer');
-        $datePoint = empty($datePoint) ? date('yyyy-MM-dd HH:mm:ss') : $datePoint;
-        $lastId = empty($lastId) ? '0' : $lastId;
+        $datePoint = empty($datePoint) ? date('Y-m-d H:m:s') : $datePoint;
+        $lastId = empty($lastId) ? 0 : $lastId;
         $history = YandexAnswer::getHistoryByDateAndLast($integrationId, $formId, $datePoint, $lastId);
         $result = [];
-        
+
         foreach ($history as $answer) {
             $fields = json_decode($answer['json_fields'], true);
             $row = [];

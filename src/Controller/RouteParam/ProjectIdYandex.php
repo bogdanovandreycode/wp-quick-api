@@ -25,6 +25,6 @@ class ProjectIdYandex extends ParamRoute implements ParamRoureInterface
 
     public function sanitize($param, $request, $key): mixed
     {
-        return (int)$param;
+        return (string)$param;
     }
 }

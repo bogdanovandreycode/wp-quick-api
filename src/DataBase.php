@@ -11,13 +11,13 @@ class DataBase
 {
     private static $wpdb;
 
-    public static function init()
+    public static function init(): void
     {
         global $wpdb;
         self::$wpdb = $wpdb;
     }
 
-    public static function getProjects()
+    public static function getProjects(): array|object|null
     {
         return self::$wpdb->get_results(
             "SELECT * FROM `wp_qf3_projects`",
@@ -25,7 +25,7 @@ class DataBase
         );
     }
 
-    public static function getProject($id)
+    public static function getProject(int $id): array|object|null
     {
         return self::$wpdb->get_row(
             self::$wpdb->prepare("SELECT * FROM `wp_qf3_projects` WHERE `id` = %d", $id),
@@ -33,56 +33,56 @@ class DataBase
         );
     }
 
-    public static function getHistory($project_id)
+    public static function getHistory(int $projectId): array|object|null
     {
         return self::$wpdb->get_results(
-            self::$wpdb->prepare("SELECT `id`, `st_form`, `st_date` FROM `wp_qf3_ps` WHERE `st_formid` = %d", $project_id),
+            self::$wpdb->prepare("SELECT `id`, `st_form`, `st_date` FROM `wp_qf3_ps` WHERE `st_formid` = %d", $projectId),
             ARRAY_A
         );
     }
 
-    public static function getHistoryByDate($project_id, $date)
+    public static function getHistoryByDate(int $projectId, string $date): array|object|null
     {
         return self::$wpdb->get_results(
             self::$wpdb->prepare(
                 "SELECT `id`, `st_form`, `st_date` FROM `wp_qf3_ps` WHERE `st_formid` = %d AND `st_date` > %s",
-                $project_id,
+                $projectId,
                 $date
             ),
             ARRAY_A
         );
     }
 
-    public static function getHistoryByDateAndLast($project_id, $date, $last_id)
+    public static function getHistoryByDateAndLast(int $projectId, string $date, int $lastId): array|object|null
     {
         return self::$wpdb->get_results(
             self::$wpdb->prepare(
                 "SELECT `id`, `st_form`, `st_date` FROM `wp_qf3_ps` WHERE `st_formid` = %d AND `st_date` > %s AND `id` > %d",
-                $project_id,
+                $projectId,
                 $date,
-                $last_id
+                $lastId
             ),
             ARRAY_A
         );
     }
 
-    public static function getForms($project_id)
+    public static function getForms(int $projectId): array|object|null
     {
         return self::$wpdb->get_results(
             self::$wpdb->prepare(
                 "SELECT `id`, `fields` FROM `wp_qf3_forms` WHERE `projectid` = %d",
-                $project_id
+                $projectId
             ),
             ARRAY_A
         );
     }
 
-    public static function updateForm($form_id, $fields)
+    public static function updateForm(int $formId, array $fields): bool|int
     {
-        return $result = self::$wpdb->update(
+        return self::$wpdb->update(
             'wp_qf3_forms', // имя таблицы
             array('fields' => $fields), // массив данных для обновления
-            array('id' => $form_id), // массив условий для выбора строк для обновления
+            array('id' => $formId), // массив условий для выбора строк для обновления
             array('%s'), // типы данных для обновляемых полей
             array('%d') // типы данных для условий
         );

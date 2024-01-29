@@ -32,7 +32,7 @@ class GetAnswersQuickForm extends RouteController implements RestRouteInterface
         $projectId = (int)$request->get_param('quickapi-form-id');
         $datePoint = (string)$request->get_param('quickapi-date-point');
         $lastId = (int)$request->get_param('quickapi-last-answer');
-        $datePoint = empty($datePoint) ? date('yyyy-MM-dd HH:mm:ss') : $datePoint;
+        $datePoint = empty($datePoint) ? date('Y-m-d H:m:s') : $datePoint;
         $lastId = empty($lastId) ? '0' : $lastId;
         $history = DataBase::getHistoryByDateAndLast($projectId, $datePoint, $lastId);
         $result  = [];
