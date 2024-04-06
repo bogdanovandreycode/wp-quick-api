@@ -14,13 +14,6 @@ class qfEmail_tmpl extends qfEmail
     public function getTmpl($project, $data, $calculator)
     {
         $html = '';
-        if (!$project->params->showtitle) {
-            $html .= '<h3>' . $project->title . '</h3>';
-        }
-
-        if ($project->params->showurl) {
-            $html .= $this->checkUrl();
-        }
 
         if ($project->params->calculatortype) {
             $data['sum'] = $calculator;

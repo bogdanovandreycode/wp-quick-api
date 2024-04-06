@@ -41,6 +41,10 @@ class GetAnswersQuickForm extends RouteController implements RestRouteInterface
             $fields = json_decode($answer['st_form']);
             $row = [];
 
+            if (empty($fields)) {
+                continue;
+            }
+
             foreach ($fields as $field) {
                 $row[] = [
                     'name' => $field->name,
